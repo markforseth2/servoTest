@@ -23,6 +23,7 @@ def setServo(angle):
             setServo(angle)
             time.sleep(delay_period)
 
+
         for angle in range(0, 180):
             setServo(180 - angle)
             time.sleep(delay_period)

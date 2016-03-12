@@ -1,30 +1,27 @@
-# Servo Control
+
+import RPi.GPIO as GPIO
 import time
 
+GPIO.setmode(GPIO.BOARD)
 
+GPIO.setup(12,GPIO.OUT)
 
-def set(property, value):
-    try:
-        f = open("/sys/class/rpi-pwm/pwm0/" + property, 'w')
-        f.write(value)
-        f.close()
-    except:
-        print("Error writing to: " + property + " value: " + value)
+p = GPIO.PWM(12,50)
+p.start(7.5)
+try:
+	while True:
+		p.ChangeDutyCycle(10.5)
+		print "Changing to 150"
+		time.sleep(2)
+		p.ChangeDutyCycle(7.5)
+		print "changing to 90"
+		time.sleep(2)
+		p.ChangeDutyCycle(3)
+		print "changing to 0"
 
+		time.sleep(2)
 
-def setServo(angle):
-    set("servo", str(angle))
-    set("delayed", "0")
-    set("mode", "servo")
-    set("servo_max", "180")
-    set("active", "1")
-    delay_period = 0.01
-    while True:
-        for angle in range(0, 180):
-            setServo(angle)
-            time.sleep(delay_period)
+except KeyboardInterrupt:
+	p.stop()
 
-
-        for angle in range(0, 180):
-            setServo(180 - angle)
-            time.sleep(delay_period)
+	GPIO.cleanup()
